@@ -11,10 +11,23 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 | id_produtor | Identificador único do produtor |
 | nome | Nome do produtor |
 | cpf_cnpj | CPF ou CNPJ |
-| telefone | Telefone para contato |
-| email | E-mail do produtor |
-| cidade | Cidade onde está localizado |
-| estado | Estado onde está localizado |
+| telefone | Telefone |
+| email | E-mail |
+| cidade | Cidade |
+| estado | Estado |
+
+---
+
+# Entidade: Fazenda
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_fazenda | Identificador único da fazenda |
+| nome | Nome da fazenda |
+| area_total | Área total da fazenda |
+| cidade | Cidade |
+| estado | Estado |
+| id_produtor | Produtor proprietário |
 
 ---
 
@@ -24,11 +37,10 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 |----------|-----------|
 | id_talhao | Identificador único do talhão |
 | nome | Nome do talhão |
-| area_hectares | Área do talhão em hectares |
-| localizacao | Localização do talhão |
-| tipo_solo | Tipo de solo predominante |
-| status | Situação do talhão (ativo ou inativo) |
-| id_produtor | Produtor responsável pelo talhão |
+| area_hectares | Área em hectares |
+| tipo_solo | Tipo de solo |
+| status | Situação do talhão |
+| id_fazenda | Fazenda responsável |
 
 ---
 
@@ -36,11 +48,11 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 
 | Atributo | Descrição |
 |----------|-----------|
-| id_cultura | Identificador único da cultura |
+| id_cultura | Identificador único |
 | nome | Nome da cultura |
-| tipo | Tipo da cultura (grão, cereal etc.) |
-| ciclo_dias | Tempo médio de cultivo em dias |
-| produtividade_media | Produção média esperada por hectare |
+| tipo | Tipo da cultura |
+| ciclo_dias | Ciclo médio |
+| produtividade_media | Produção média esperada |
 
 ---
 
@@ -48,26 +60,24 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 
 | Atributo | Descrição |
 |----------|-----------|
-| id_safra | Identificador único da safra |
+| id_safra | Identificador único |
 | ano | Ano da safra |
-| data_inicio | Data de início da safra |
-| data_fim | Data de encerramento da safra |
-| id_cultura | Cultura plantada na safra |
+| data_inicio | Início |
+| data_fim | Fim |
+| id_talhao | Talhão |
+| id_cultura | Cultura |
 
 ---
 
-# Entidade: Máquina
+# Entidade: Produção
 
 | Atributo | Descrição |
 |----------|-----------|
-| id_maquina | Identificador único da máquina |
-| modelo | Modelo da máquina |
-| marca | Fabricante da máquina |
-| potencia | Potência do equipamento |
-| ano_fabricacao | Ano de fabricação |
-| consumo_medio | Consumo médio de combustível |
-
-> **Observação:** A relação entre funcionários e máquinas será modelada posteriormente por meio de uma tabela intermediária.
+| id_producao | Identificador |
+| quantidade | Quantidade produzida |
+| unidade | Unidade de medida |
+| data_colheita | Data da colheita |
+| id_safra | Safra |
 
 ---
 
@@ -75,14 +85,97 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 
 | Atributo | Descrição |
 |----------|-----------|
-| id_funcionario | Identificador único do funcionário |
-| nome | Nome completo |
-| cpf | CPF do funcionário |
-| telefone | Telefone para contato |
+| id_funcionario | Identificador |
+| nome | Nome |
+| cpf | CPF |
+| telefone | Telefone |
 | email | E-mail |
-| cargo | Cargo exercido |
+| cargo | Cargo |
 | salario | Salário |
 | data_admissao | Data de admissão |
+
+---
+
+# Entidade: Máquina
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_maquina | Identificador |
+| modelo | Modelo |
+| marca | Fabricante |
+| potencia | Potência |
+| ano_fabricacao | Ano de fabricação |
+| consumo_medio | Consumo médio |
+
+---
+
+# Entidade: Utilização de Máquina
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_utilizacao | Identificador |
+| data_utilizacao | Data |
+| horas_trabalhadas | Horas trabalhadas |
+| id_funcionario | Funcionário |
+| id_maquina | Máquina |
+
+---
+
+# Entidade: Fornecedor
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_fornecedor | Identificador |
+| nome | Nome |
+| cnpj | CNPJ |
+| telefone | Telefone |
+| email | E-mail |
+
+---
+
+# Entidade: Compra
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_compra | Identificador |
+| data_compra | Data |
+| valor_total | Valor |
+| id_fornecedor | Fornecedor |
+
+---
+
+# Entidade: Item Compra
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_item_compra | Identificador |
+| quantidade | Quantidade |
+| preco_unitario | Preço unitário |
+| id_compra | Compra |
+| id_produto | Produto |
+
+---
+
+# Entidade: Produto Insumo
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_produto | Identificador |
+| nome | Nome |
+| categoria | Categoria |
+| unidade_medida | Unidade |
+| preco_medio | Preço médio |
+
+---
+
+# Entidade: Estoque
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_estoque | Identificador |
+| quantidade | Quantidade disponível |
+| localizacao | Local |
+| id_produto | Produto |
 
 ---
 
@@ -90,40 +183,44 @@ Este documento descreve as entidades e os principais atributos do banco de dados
 
 | Atributo | Descrição |
 |----------|-----------|
-| id_cliente | Identificador único do cliente |
-| nome | Nome do cliente |
-| cnpj | CNPJ da empresa cliente |
-| telefone | Telefone para contato |
+| id_cliente | Identificador |
+| nome | Nome |
+| cnpj | CNPJ |
+| telefone | Telefone |
 | email | E-mail |
 | cidade | Cidade |
 | estado | Estado |
 
+---
+
+# Entidade: Venda
+
+| Atributo | Descrição |
+|----------|-----------|
+| id_venda | Identificador |
+| data_venda | Data |
+| valor_total | Valor |
+| id_cliente | Cliente |
 
 ---
 
-# Próximas Entidades
+# Entidade: Item Venda
 
-As seguintes entidades serão detalhadas nas próximas etapas do projeto:
-
-- Fornecedor
-- Produto
-- Estoque
-- Compra
-- Venda
-- Item Compra
-- Item Venda
-- Utilização de Máquina
-- Aplicação de Insumos
+| Atributo | Descrição |
+|----------|-----------|
+| id_item_venda | Identificador |
+| quantidade | Quantidade |
+| preco_unitario | Preço unitário |
+| id_venda | Venda |
+| id_producao | Produção |
 
 ---
 
-## Convenções
+# Convenções
 
-Durante todo o projeto serão adotadas as seguintes convenções:
-
-- Nomes de tabelas em singular.
-- Nomes em letras minúsculas.
-- Sem acentos.
+- Tabelas em singular.
+- Nomes em minúsculas.
 - Sem espaços.
+- Sem acentos.
 - Chaves primárias iniciadas por `id_`.
-- Relacionamentos representados por chaves estrangeiras (`Foreign Keys`).
+- Chaves estrangeiras utilizando o mesmo nome da chave primária da tabela relacionada.

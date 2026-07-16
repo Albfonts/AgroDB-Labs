@@ -60,8 +60,8 @@ AgroDB-Labs
 ## Roadmap
 
 - [x] Levantamento de requisitos
-- [ ] Modelagem conceitual
-- [ ] Modelagem lógica
+- [x] Modelagem conceitual
+- [x] Modelagem lógica
 - [ ] Modelagem física
 - [ ] Criação do schema
 - [ ] Inserção de dados

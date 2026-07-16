@@ -10,7 +10,7 @@ Os principais cultivos são:
 
 - 🌱 Soja
 - 🌽 Milho
-- 🌾 Trigo
+- 🎋 Cana-de-açúcar
 
 O objetivo é fornecer informações confiáveis para apoiar a tomada de decisão e otimizar os resultados da produção agrícola.
 

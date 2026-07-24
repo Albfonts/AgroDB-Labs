@@ -1,21 +1,13 @@
 -- =========================================================
 -- AgroDB-Labs :: database/queries.sql
 -- PostgreSQL 17
--- Consultas analíticas construídas de forma incremental,
--- documentando cada conceito de SQL aplicado ao modelo real.
 -- =========================================================
 
 
 -- =========================================================
 -- BLOCO 0 — SELECT, WHERE, ORDER BY, AND / OR / NOT
 -- =========================================================
--- Conceito: a base de tudo. SELECT define quais colunas eu quero
--- ver, WHERE filtra as linhas, ORDER BY define a ordem, e
--- AND/OR/NOT combinam condições de filtro.
--- =========================================================
 
--- 0.1 SELECT + WHERE simples
--- Lista apenas os talhões que estão com status 'Ativo'
 SELECT
     nome,
     area_hectares,
@@ -25,8 +17,6 @@ FROM talhao
 WHERE status = 'Ativo';
 
 
--- 0.2 WHERE com operador de comparação + ORDER BY
--- Fazendas com área total maior que 450 hectares, da maior pra menor
 SELECT
     nome,
     area_total,
@@ -37,8 +27,6 @@ WHERE area_total > 450
 ORDER BY area_total DESC;
 
 
--- 0.3 AND — as duas condições precisam ser verdadeiras
--- Talhões com solo Latossolo E área maior que 100 hectares
 SELECT
     nome,
     area_hectares,
@@ -48,8 +36,6 @@ WHERE tipo_solo = 'Latossolo'
   AND area_hectares > 100;
 
 
--- 0.4 OR — pelo menos uma das condições precisa ser verdadeira
--- Produtos das categorias 'Semente' OU 'Defensivo Agrícola'
 SELECT
     nome,
     categoria,
@@ -59,9 +45,6 @@ WHERE categoria = 'Semente'
    OR categoria = 'Defensivo Agrícola';
 
 
--- 0.5 NOT — inverte a condição
--- Todas as culturas, exceto a Soja
--- Equivalente mais comum na prática: WHERE nome <> 'Soja'
 SELECT
     nome,
     tipo,
@@ -70,9 +53,6 @@ FROM cultura
 WHERE NOT nome = 'Soja';
 
 
--- 0.6 Combinando AND + OR + NOT numa consulta só
--- Vendas concluídas, com valor acima de 900000, que NÃO sejam
--- da Cargill Agrícola S.A.
 SELECT
     v.data_venda,
     v.valor_total,
@@ -89,13 +69,7 @@ ORDER BY v.valor_total DESC;
 -- =========================================================
 -- BLOCO 1 — INNER JOIN
 -- =========================================================
--- Conceito: retorna apenas as linhas onde existe correspondência
--- em AMBAS as tabelas. Se um produtor não tiver fazenda, ou uma
--- fazenda não tiver talhão, essas linhas não aparecem no resultado.
--- =========================================================
 
--- 1.1 Produtores e suas fazendas
--- Relaciona produtor -> fazenda (1:N)
 SELECT
     p.nome          AS produtor,
     p.cidade        AS cidade_produtor,
@@ -107,8 +81,6 @@ INNER JOIN fazenda f ON f.id_produtor = p.id_produtor
 ORDER BY p.nome;
 
 
--- 1.2 Fazendas, talhões e o tipo de solo de cada um
--- Relaciona fazenda -> talhao (1:N)
 SELECT
     f.nome          AS fazenda,
     t.nome          AS talhao,
@@ -120,9 +92,6 @@ INNER JOIN talhao t ON t.id_fazenda = f.id_fazenda
 ORDER BY f.nome, t.nome;
 
 
--- 1.3 Cadeia completa: produtor -> fazenda -> talhão -> safra -> cultura
--- Encadeamento de vários INNER JOIN, um para cada relacionamento 1:N
--- do módulo Produção. Mostra qual cultura está plantada em cada talhão.
 SELECT
     p.nome      AS produtor,
     f.nome      AS fazenda,
@@ -139,8 +108,6 @@ INNER JOIN cultura c ON c.id_cultura  = s.id_cultura
 ORDER BY p.nome, f.nome, t.nome;
 
 
--- 1.4 Vendas com o nome do cliente
--- Relaciona venda -> cliente (N:1)
 SELECT
     v.id_venda,
     v.data_venda,
@@ -151,3 +118,51 @@ SELECT
 FROM venda v
 INNER JOIN cliente cl ON cl.id_cliente = v.id_cliente
 ORDER BY v.data_venda;
+
+
+-- =========================================================
+-- BLOCO 2 — LEFT JOIN
+-- =========================================================
+
+SELECT
+    t.nome          AS talhao,
+    t.area_hectares,
+    t.tipo_solo,
+    s.ano           AS ano_safra,
+    s.data_inicio,
+    s.data_fim
+FROM talhao t
+LEFT JOIN safra s ON s.id_talhao = t.id_talhao
+ORDER BY t.nome;
+
+
+SELECT
+    p.nome          AS produto,
+    p.categoria,
+    p.preco_unitario,
+    e.quantidade,
+    e.localizacao
+FROM produto p
+LEFT JOIN estoque e ON e.id_produto = p.id_produto
+ORDER BY p.nome;
+
+
+SELECT
+    f.nome          AS funcionario,
+    f.cargo,
+    um.data_utilizacao,
+    um.atividade
+FROM funcionario f
+LEFT JOIN utilizacao_maquina um ON um.id_funcionario = f.id_funcionario
+ORDER BY f.nome, um.data_utilizacao;
+
+
+SELECT
+    t.nome          AS talhao,
+    t.area_hectares,
+    t.tipo_solo,
+    t.status
+FROM talhao t
+LEFT JOIN safra s ON s.id_talhao = t.id_talhao
+WHERE s.id_safra IS NULL
+ORDER BY t.nome;

@@ -1,10 +1,4 @@
 -- =========================================================
--- AgroDB-Labs :: database/queries.sql
--- PostgreSQL 17
--- =========================================================
-
-
--- =========================================================
 -- BLOCO 0 — SELECT, WHERE, ORDER BY, AND / OR / NOT
 -- =========================================================
 
@@ -166,3 +160,54 @@ FROM talhao t
 LEFT JOIN safra s ON s.id_talhao = t.id_talhao
 WHERE s.id_safra IS NULL
 ORDER BY t.nome;
+
+
+-- =========================================================
+-- BLOCO 3 — GROUP BY / FUNÇÕES DE AGREGAÇÃO
+-- =========================================================
+
+SELECT
+    cl.nome         AS cliente,
+    SUM(v.valor_total) AS total_vendido
+FROM venda v
+INNER JOIN cliente cl ON cl.id_cliente = v.id_cliente
+GROUP BY cl.nome
+ORDER BY total_vendido DESC;
+
+
+SELECT
+    f.nome              AS fazenda,
+    COUNT(t.id_talhao)  AS total_talhoes
+FROM fazenda f
+INNER JOIN talhao t ON t.id_fazenda = f.id_fazenda
+GROUP BY f.nome
+ORDER BY total_talhoes DESC;
+
+
+SELECT
+    tipo_solo,
+    AVG(area_hectares) AS area_media_ha
+FROM talhao
+GROUP BY tipo_solo
+ORDER BY area_media_ha DESC;
+
+
+SELECT
+    fo.nome             AS fornecedor,
+    SUM(c.valor_total)  AS total_comprado
+FROM compra c
+INNER JOIN fornecedor fo ON fo.id_fornecedor = c.id_fornecedor
+GROUP BY fo.nome
+HAVING SUM(c.valor_total) > 20000
+ORDER BY total_comprado DESC;
+
+
+SELECT
+    s.id_safra,
+    s.ano,
+    SUM(p.quantidade) AS producao_total
+FROM safra s
+INNER JOIN producao p ON p.id_safra = s.id_safra
+GROUP BY s.id_safra, s.ano
+ORDER BY producao_total DESC
+LIMIT 1;

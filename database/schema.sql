@@ -1,10 +1,4 @@
 -- =========================================================
--- AgroDB-Labs :: database/schema.sql
--- PostgreSQL 17
--- Versão 2.0 — inclui UNIQUE, CHECK e colunas geradas
--- =========================================================
-
--- =========================================================
 -- DROP TABLES (ordem inversa de dependência)
 -- =========================================================
 DROP TABLE IF EXISTS utilizacao_maquina CASCADE;

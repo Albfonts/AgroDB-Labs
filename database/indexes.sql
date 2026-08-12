@@ -1,16 +1,3 @@
--- =========================================================
--- AgroDB-Labs :: database/indexes.sql
--- PostgreSQL 17
--- Índices sobre colunas de Foreign Key
---
--- Motivo: o PostgreSQL cria índice automático apenas na
--- Primary Key. Colunas de FK usadas em JOIN, WHERE ou
--- ORDER BY precisam de índice próprio para evitar
--- Sequential Scan em tabelas grandes.
---
--- Executar após schema.sql e seed.sql.
--- =========================================================
-
 -- MÓDULO PRODUÇÃO
 CREATE INDEX idx_fazenda_id_produtor ON fazenda (id_produtor);
 CREATE INDEX idx_talhao_id_fazenda ON talhao (id_fazenda);
@@ -34,10 +21,7 @@ CREATE INDEX idx_utilizacao_maquina_id_funcionario ON utilizacao_maquina (id_fun
 CREATE INDEX idx_utilizacao_maquina_id_maquina ON utilizacao_maquina (id_maquina);
 CREATE INDEX idx_utilizacao_maquina_id_talhao ON utilizacao_maquina (id_talhao);
 
--- =========================================================
--- Índices auxiliares para consultas frequentes
--- (datas usadas em relatórios e filtros por período)
--- =========================================================
+-- Índices auxiliares
 CREATE INDEX idx_safra_data_inicio ON safra (data_inicio);
 CREATE INDEX idx_producao_data_colheita ON producao (data_colheita);
 CREATE INDEX idx_venda_data_venda ON venda (data_venda);

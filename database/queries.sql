@@ -235,3 +235,13 @@ WHERE p.id_produtor IN (
      WHERE talhao.id_fazenda = fazenda.id_fazenda
     ) AS total_talhoes
 FROM fazenda;
+
+SELECT
+    id_cliente,
+    nome
+FROM cliente
+WHERE EXISTS (
+    SELECT 1
+    FROM venda
+    WHERE venda.id_cliente = cliente.id_cliente
+);

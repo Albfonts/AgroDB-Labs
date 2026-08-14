@@ -211,3 +211,27 @@ INNER JOIN producao p ON p.id_safra = s.id_safra
 GROUP BY s.id_safra, s.ano
 ORDER BY producao_total DESC
 LIMIT 1;
+
+
+-- =========================================================
+-- BLOCO 4 — Subqueries/Subconsultas
+-- =========================================================
+
+SELECT 
+    p.id_produtor,
+    p.nome,
+FROM produtor AS p
+WHERE p.id_produtor IN (
+    SELECT f.id_produtor
+    FROM fazenda AS f
+    WHERE f.area_total > 500
+);
+
+ SELECT 
+    nome, 
+    area_total, 
+    (SELECT COUNT(*) 
+     FROM talhao 
+     WHERE talhao.id_fazenda = fazenda.id_fazenda
+    ) AS total_talhoes
+FROM fazenda;
